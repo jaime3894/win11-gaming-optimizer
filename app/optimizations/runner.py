@@ -2,12 +2,15 @@ import subprocess
 import threading
 from typing import Callable
 
+CREATE_NO_WINDOW = 0x08000000
+
 
 def _run_ps(command: str) -> tuple[bool, str]:
     try:
         result = subprocess.run(
             ["powershell", "-NoProfile", "-NonInteractive", "-ExecutionPolicy", "Bypass", "-Command", command],
             capture_output=True, text=True, timeout=30,
+            creationflags=CREATE_NO_WINDOW,
         )
         if result.returncode != 0 and result.stderr.strip():
             return False, result.stderr.strip()

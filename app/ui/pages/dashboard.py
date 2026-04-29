@@ -77,16 +77,23 @@ class DashboardPage(ctk.CTkFrame):
     def _load_info(self):
         try:
             info = si.collect_all()
-        except Exception:
-            return
-        disk = info["disk"]
-        updates = {
-            "cpu": f"{info['cpu']}  ({info['cpu_cores']}C / {info['cpu_threads']}T)",
-            "gpu": info["gpu"],
-            "ram": f"{info['ram_gb']} GB",
-            "windows": info["windows"],
-            "disk": f"{disk['free']:.1f} GB libres de {disk['total']:.1f} GB  ({disk['percent']}% usado)",
-        }
+            disk = info["disk"]
+            updates = {
+                "cpu": f"{info['cpu']}  ({info['cpu_cores']}C / {info['cpu_threads']}T)" if info['cpu_cores'] else info['cpu'],
+                "gpu": info["gpu"],
+                "ram": f"{info['ram_gb']} GB" if info['ram_gb'] else "Desconocido",
+                "windows": info["windows"],
+                "disk": f"{disk['free']:.1f} GB libres de {disk['total']:.1f} GB  ({disk['percent']}% usado)" if disk['total'] else "Desconocido",
+            }
+        except Exception as e:
+            import traceback
+            try:
+                with open("error.log", "a", encoding="utf-8") as f:
+                    f.write("collect_all failed:\n" + traceback.format_exc() + "\n")
+            except Exception:
+                pass
+            updates = {k: "No disponible" for k in self.card_labels.keys()}
+
         try:
             for key, val in updates.items():
                 if key in self.card_labels:
