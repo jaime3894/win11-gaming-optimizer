@@ -1,0 +1,29 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+.venv/
+venv/
+env/
+
+# PyInstaller build artifacts
+build/
+dist/
+*.spec
+
+# IDE
+.vscode/
+.idea/
+*.swp
+
+# App runtime
+error.log
+*.log
+
+# OS
+Thumbs.db
+.DS_Store
+desktop.ini
